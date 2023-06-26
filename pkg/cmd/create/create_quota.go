@@ -85,10 +85,10 @@ func NewCmdCreateQuota(f cmdutil.Factory, ioStreams genericiooptions.IOStreams) 
 	o := NewQuotaOpts(ioStreams)
 
 	cmd := &cobra.Command{
-		Use:                   "quota NAME [--hard=key1=value1,key2=value2] [--scopes=Scope1,Scope2] [--dry-run=server|client|none]",
+		Use:                   "resourcequota NAME [--hard=key1=value1,key2=value2] [--scopes=Scope1,Scope2] [--dry-run=server|client|none]",
 		DisableFlagsInUseLine: true,
-		Aliases:               []string{"resourcequota"},
-		Short:                 i18n.T("Create a quota with the specified name"),
+		Aliases:               []string{"quota"},
+		Short:                 i18n.T("Create a resoucequota with the specified name"),
 		Long:                  quotaLong,
 		Example:               quotaExample,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -187,7 +187,7 @@ func (o *QuotaOpts) Run() error {
 		}
 		resourceQuota, err = o.Client.ResourceQuotas(o.Namespace).Create(context.TODO(), resourceQuota, createOptions)
 		if err != nil {
-			return fmt.Errorf("failed to create quota: %v", err)
+			return fmt.Errorf("failed to create resourcequota: %v", err)
 		}
 	}
 	return o.PrintObj(resourceQuota)
@@ -259,7 +259,7 @@ func parseScopes(spec string) ([]corev1.ResourceQuotaScope, error) {
 		// intentionally do not verify the scope against the valid scope list. This is done by the apiserver anyway.
 
 		if scope == "" {
-			return nil, fmt.Errorf("invalid resource quota scope \"\"")
+			return nil, fmt.Errorf("invalid resourcequota scope \"\"")
 		}
 
 		result = append(result, corev1.ResourceQuotaScope(scope))
